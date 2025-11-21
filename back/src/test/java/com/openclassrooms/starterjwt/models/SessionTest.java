@@ -43,6 +43,63 @@ class SessionTest {
     }
 
     @Test
+    void sessionBuilder_ToString_ShouldContainSessionBuilder() {
+        Session.SessionBuilder builder = Session.builder()
+                .name("Test Session")
+                .date(new Date())
+                .description("Test description");
+
+        String builderString = builder.toString();
+
+        assertThat(builderString).contains("SessionBuilder");
+    }
+
+    @Test
+    void sessionBuilder_ShouldAllowSettingEachFieldIndividually() {
+        Session.SessionBuilder builder = Session.builder();
+        LocalDateTime now = LocalDateTime.now();
+        Date date = new Date();
+        Teacher teacher = Teacher.builder().id(1L).lastName("Teacher").firstName("Test").build();
+        List<User> users = new ArrayList<>();
+
+        builder.id(99L);
+        builder.name("Builder Session");
+        builder.date(date);
+        builder.description("Builder description");
+        builder.teacher(teacher);
+        builder.users(users);
+        builder.createdAt(now);
+        builder.updatedAt(now);
+
+        Session session = builder.build();
+
+        assertThat(session.getId()).isEqualTo(99L);
+        assertThat(session.getName()).isEqualTo("Builder Session");
+        assertThat(session.getDate()).isEqualTo(date);
+        assertThat(session.getDescription()).isEqualTo("Builder description");
+        assertThat(session.getTeacher()).isEqualTo(teacher);
+        assertThat(session.getUsers()).isEmpty();
+        assertThat(session.getCreatedAt()).isEqualTo(now);
+        assertThat(session.getUpdatedAt()).isEqualTo(now);
+    }
+
+    @Test
+    void sessionBuilder_ShouldAllowChainingMethodCalls() {
+        Date date = new Date();
+        Session session = Session.builder()
+                .id(1L)
+                .name("Chained Session")
+                .date(date)
+                .description("Chained description")
+                .build();
+
+        assertThat(session).isNotNull();
+        assertThat(session.getId()).isEqualTo(1L);
+        assertThat(session.getName()).isEqualTo("Chained Session");
+        assertThat(session.getDate()).isEqualTo(date);
+    }
+
+    @Test
     void noArgsConstructor_ShouldCreateEmptySession() {
         Session session = new Session();
 

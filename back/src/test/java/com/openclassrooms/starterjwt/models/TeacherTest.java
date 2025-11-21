@@ -83,6 +83,65 @@ class TeacherTest {
             assertThat(teacher.getCreatedAt()).isNull();
             assertThat(teacher.getUpdatedAt()).isNull();
         }
+
+        @Test
+        @DisplayName("TeacherBuilder toString should contain TeacherBuilder")
+        void teacherBuilder_ToString_ShouldContainTeacherBuilder() {
+            Teacher.TeacherBuilder builder = Teacher.builder()
+                    .lastName("TestLastName")
+                    .firstName("TestFirstName");
+
+            String builderString = builder.toString();
+
+            assertThat(builderString).contains("TeacherBuilder");
+        }
+
+        @Test
+        @DisplayName("TeacherBuilder should allow setting each field individually")
+        void teacherBuilder_ShouldAllowSettingEachFieldIndividually() {
+            Teacher.TeacherBuilder builder = Teacher.builder();
+
+            builder.id(99L);
+            builder.lastName("BuilderLast");
+            builder.firstName("BuilderFirst");
+            builder.createdAt(fixedDateTime);
+            builder.updatedAt(fixedDateTime);
+
+            Teacher teacher = builder.build();
+
+            assertThat(teacher.getId()).isEqualTo(99L);
+            assertThat(teacher.getLastName()).isEqualTo("BuilderLast");
+            assertThat(teacher.getFirstName()).isEqualTo("BuilderFirst");
+            assertThat(teacher.getCreatedAt()).isEqualTo(fixedDateTime);
+            assertThat(teacher.getUpdatedAt()).isEqualTo(fixedDateTime);
+        }
+
+        @Test
+        @DisplayName("TeacherBuilder should allow chaining method calls")
+        void teacherBuilder_ShouldAllowChainingMethodCalls() {
+            Teacher teacher = Teacher.builder()
+                    .id(1L)
+                    .lastName("Chained")
+                    .firstName("Method")
+                    .build();
+
+            assertThat(teacher).isNotNull();
+            assertThat(teacher.getId()).isEqualTo(1L);
+            assertThat(teacher.getLastName()).isEqualTo("Chained");
+            assertThat(teacher.getFirstName()).isEqualTo("Method");
+        }
+
+        @Test
+        @DisplayName("TeacherBuilder should create independent teacher instances")
+        void teacherBuilder_ShouldCreateIndependentTeacherInstances() {
+            Teacher.TeacherBuilder builder = Teacher.builder();
+
+            Teacher teacher1 = builder.lastName("Teacher1").firstName("First1").build();
+            Teacher teacher2 = Teacher.builder().lastName("Teacher2").firstName("First2").build();
+
+            assertThat(teacher1.getLastName()).isNotEqualTo(teacher2.getLastName());
+            assertThat(teacher1.getFirstName()).isNotEqualTo(teacher2.getFirstName());
+        }
     }
 
     @Test
