@@ -1,13 +1,28 @@
 {
-  "extends": "@istanbuljs/nyc-config-typescript",
-  "all": true,
+  "report-dir": "coverage/e2e",
+  "temp-dir": ".nyc_output",
+  "extension": [
+    ".js",
+    ".ts"
+  ],
   "exclude": [
-    "./coverage/**",
-    "cypress/**",
-    "./dist/**",
     "**/*.spec.ts",
-    "./src/main.ts",
-    "./src/test.ts",
-    "**/*.conf.js"
-  ]
+    "**/*.e2e.ts",
+    "**/cypress/**",
+    "**/node_modules/**",
+    "**/*.module.ts",
+    "**/main.ts",
+    "**/polyfills.ts",
+    "**/environment*.ts"
+  ],
+  "reporter": [
+    "html",
+    "lcov",
+    "text-summary",
+    "json"
+  ],
+  "all": true,
+  "sourceMap": true,
+  "instrument": true,
+  "produceSourceMap": true
 }
